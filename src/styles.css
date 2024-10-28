@@ -51,3 +51,27 @@ h6 {
 
 /* Reset End */
 
+:root {
+    /* Solarized Theme */
+    /* Background tones (light theme) */
+    --white: #eee8d5;
+    --brwhite: #fdf6e3;
+
+    /* Accent tones */
+    --yellow: #b58900;
+    --brred: #cb4b16;
+    --red: #dc322f;
+    --magenta: #d33682;
+    --brmagenta: #6c71c4;
+    --blue: #268bd2;
+    --cyan: #2aa198;
+    --green: #859900;
+}
+
+* {
+    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
+}
+
+body {
+    background-color: var(--brwhite);
+}
