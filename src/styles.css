@@ -54,7 +54,7 @@ h6 {
 :root {
     /* Based on Solarized Theme by Ethan Schoonover */
     /* Background tones (light theme) */
-    --white: #eee8d5;
+    --white: #e9dabd;
     --brwhite: #fdf6e3;
     --accentwhite: #d4b596;
 
@@ -81,9 +81,25 @@ body {
     background-color: var(--brwhite);
 }
 
+button {
+    background-color: inherit;
+    border: none;
+    cursor: pointer;
+}
+
+ul,
+li {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: inherit;
+    color: inherit;
+}
+
 .master-grid {
     display: grid;
-    grid-template-columns: 1fr 4fr;
+    grid-template-columns: minmax(275px, 1fr) 4fr;
 }
 
 .sidebar {
@@ -91,22 +107,98 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
+    font-size: 1.1rem;
+    line-height: 40px;
+    border-right: solid 1px var(--accentwhite);
 }
 
-.sidebar-footer {
-    margin-top: auto;
-    border-top: solid 1px var(--accentwhite);
-    height: 50px;
+.logo {
+    font-size: 2.6rem;
+    margin-bottom: 30px;
+}
+
+.static-sidebar-items {
+    margin: 30px 0 60px 0;
+}
+
+.fa-solid {
+    width: 60px;
+    text-align: center;
+}
+
+.list-inner-flex {
+    display: flex;
+}
+
+/* .list-inner-flex > */
+a > span:hover {
+    font-weight: 600;
 }
 
 .nav-list-container {
-    padding: 10px 30px 10px 30px;
+    padding: 0;
+    margin-bottom: 30px;
     display: flex;
     flex-direction: column;
     gap: 3px;
 }
 
-.nav-list-header {
-    font-size: 1.2rem;
-    font-weight: 600;
+/* .nav-list-header {
+    font-weight: 500;
+    vertical-align: baseline;
+} */
+
+.nav-list-child {
+    font-size: 1.1rem;
+    font-weight: 380;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 0 20px 0 20px;
+    border-top: solid 1px var(--accentwhite);
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.new-list-btn {
+    margin-left: 4px;
+    border-radius: 5px;
+    width: 160px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.new-list-btn > i {
+    padding: 0;
+    margin: 0 5px 0 20px;
+    width: 30px;
+    vertical-align: middle;
+    position: relative;
+    top: 1px;
+}
+
+.new-list-btn > span,
+.new-list-btn > i {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.new-list-btn:hover {
+    background-color: var(--accentwhite);
+    transition: 0.3s;
+}
+
+.settings-btn {
+    margin-left: auto;
+}
+
+.settings-btn > i {
+    position: relative;
+    top: 1px;
 }
