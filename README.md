@@ -14,3 +14,4 @@ https://www.theodinproject.com/lessons/node-path-javascript-todo-list
 - Use GitHub template for webpack initialization
 - localStorage to keep data persistent
 - External libraries using npm
+- Font Awesome Icons researched and used
