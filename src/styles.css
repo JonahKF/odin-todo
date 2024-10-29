@@ -202,3 +202,12 @@ a > span:hover {
     position: relative;
     top: 1px;
 }
+
+.container {
+    display: flex;
+    flex-direction: column;  
+    gap: 50px;
+    padding-top: 60px;
+    padding-left: 140px;
+    justify-items: center;
+}

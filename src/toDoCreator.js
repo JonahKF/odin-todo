@@ -54,6 +54,7 @@ class ToDoList {
 
     getAllToDoItems() {
         // .values() iterates over a map, then .map() turns the JSONs into an array.
+        console.log(Array.from(this.ToDoList.values()).map(todo => todo.toJSON()));
         return Array.from(this.ToDoList.values()).map(todo => todo.toJSON());
     }
 
@@ -61,10 +62,10 @@ class ToDoList {
         return this.Index++;
     }
 
-    addToDo (title, project = "default") {
+    addToDo (title, project = "default", description) {
         this.checkTitle(title);
         const index = this.increaseIndex();
-        const toDo = new ToDo(title, project);
+        const toDo = new ToDo(title, project, description);
         this.ToDoList.set(index, toDo);
 
         // Return index for use in DOM later
