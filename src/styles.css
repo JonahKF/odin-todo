@@ -127,13 +127,28 @@ a {
 }
 
 .list-inner-flex {
+    width: 80%;
     display: flex;
+    border-radius: 10px;
+    transition: 0.3s;
+    cursor: pointer;
+    margin-bottom: 3px;
+}
+
+.list-inner-flex:hover {
+    background-color: var(--accentwhite);
+    transition: 0.3s;
+}
+
+.active {
+    background-color: var(--accentwhite);
+    transition: 0.3s;
 }
 
 /* .list-inner-flex > */
-a > span:hover {
+/* a > span:hover {
     font-weight: 600;
-}
+} */
 
 .nav-list-container {
     padding: 0;
@@ -164,7 +179,7 @@ a > span:hover {
 
 .new-list-btn {
     margin-left: 4px;
-    border-radius: 5px;
+    border-radius: 10px;
     width: 160px;
     display: flex;
     justify-content: start;

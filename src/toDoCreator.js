@@ -40,8 +40,8 @@ class ToDoList {
     }
 
     checkTitle (title) {
-        //Check if title is valid, >30 characters
-        if(typeof title !== "string" || title.length > 30) {
+        //Check if title is valid, > 60 characters
+        if(typeof title !== "string" || title.length > 60) {
             throw new Error("Invalid Title");
         }
     }
@@ -52,9 +52,11 @@ class ToDoList {
         return ToDoItem.toJSON();
     }
 
+    deleteToDoItem (index) {
+        this.ToDoList.delete(index);
+    }
+
     getAllToDoItems() {
-        // .values() iterates over a map, then .map() turns the JSONs into an array.
-        console.log(Array.from(this.ToDoList.values()).map(todo => todo.toJSON()));
         return Array.from(this.ToDoList.values()).map(todo => todo.toJSON());
     }
 
