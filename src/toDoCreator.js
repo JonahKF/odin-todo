@@ -1,7 +1,6 @@
 class ToDo {
   constructor(
     title,
-    project = "default",
     description = "",
     dueDate = "",
     priority = "",
@@ -9,7 +8,6 @@ class ToDo {
     checklist = ""
   ) {
     this.title = title;
-    this.project = project;
     this.description = description;
     this.dueDate = dueDate;
     this.priority = priority;
@@ -21,7 +19,6 @@ class ToDo {
     return {
         //Converts to JSON
         title: this.title,
-        project: this.project,
         description: this.description,
         dueDate: this.dueDate,
         priority: this.priority,
@@ -64,10 +61,10 @@ class ToDoList {
         return this.Index++;
     }
 
-    addToDo (title, project = "default", description) {
+    addToDo (title, description) {
         this.checkTitle(title);
         const index = this.increaseIndex();
-        const toDo = new ToDo(title, project, description);
+        const toDo = new ToDo(title, description);
         this.ToDoList.set(index, toDo);
 
         // Return index for use in DOM later

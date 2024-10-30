@@ -230,6 +230,7 @@ a {
 .task-container {
     display: flex;
     align-items: center;
+    width: 50%;
 
     opacity: 1;
     transform: translateX(0);
@@ -247,6 +248,29 @@ a {
 
 .task-wrapper {
     padding-left: 30px;
+}
+
+.new-task-btn {
+    display: flex;
+    align-items: center;
+    width: 200px;
+    height: 40px;
+    margin-left: 90px;
+    margin-top: -10px;
+    /* border-radius: 25px; */
+    border-top: 1px solid var(--accentwhite);
+}
+
+.new-task-btn > .fa-solid {
+    width: 0 !important;
+    margin-right: 30px;
+    position: relative;
+    top: 1px;
+}
+
+.new-task-btn > span {
+    font-weight: 600;
+    margin-right: 30px;
 }
 
 /* Checkbox, adapted from https://uiverse.io/mrhyddenn/slippery-bear-64 */
