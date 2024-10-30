@@ -152,7 +152,7 @@ a {
 
 .nav-list-container {
     padding: 0;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
     gap: 3px;
@@ -221,8 +221,25 @@ a {
 .container {
     display: flex;
     flex-direction: column;  
-    gap: 50px;
+    gap: 25px;
     padding-top: 60px;
     padding-left: 140px;
     justify-items: center;
+}
+
+.task-container {
+    display: flex;
+    align-items: center;
+}
+
+.check-btn {
+    margin-left: 50px;
+    border-radius: 50px;
+    height: 20px;
+    width: 20px;
+    background-color: #859900;
+}
+
+.task-wrapper {
+    padding-left: 50px;
 }

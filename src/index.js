@@ -126,6 +126,11 @@ function screenController() {
 
         const taskArray = list.getAllToDoItems();
         taskArray.forEach(task => {
+            const taskContainer = document.createElement("div");
+            taskContainer.className = "task-container";
+            const checkBtn = document.createElement("button");
+            checkBtn.className = "check-btn";
+
             const div = document.createElement("div");
             div.className = "task-wrapper";
             
@@ -141,7 +146,9 @@ function screenController() {
             title.textContent = task.title;
             description.textContent = task.description;
 
-            pageBody.appendChild(div);
+            pageBody.appendChild(taskContainer);
+            taskContainer.appendChild(checkBtn);
+            taskContainer.appendChild(div);
             div.appendChild(title);
             div.appendChild(description);
             div.appendChild(dueDate);
@@ -153,6 +160,7 @@ function screenController() {
     const clickNewList = (e) => {
         //Show prompt for list title
     }
+
 
     // Generate Default List
     displayLists();
