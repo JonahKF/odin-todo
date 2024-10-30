@@ -74,8 +74,7 @@ function screenController() {
         pageBody.replaceChildren();
 
         const divList = document.querySelectorAll("div");
-        divList.forEach(element => element.classList.remove("active"));
-        e.classList.add("active");
+        updateActiveClass(divList, e);
 
         const homeHeader = document.createElement("h2");
         homeHeader.className = "home-header";
@@ -87,8 +86,7 @@ function screenController() {
         pageBody.replaceChildren();
 
         const divList = document.querySelectorAll("div");
-        divList.forEach(element => element.classList.remove("active"));
-        e.classList.add("active");
+        updateActiveClass(divList, e);
 
         const todayHeader = document.createElement("h2");
         todayHeader.className = "today-header";
@@ -100,8 +98,7 @@ function screenController() {
         pageBody.replaceChildren();
 
         const divList = document.querySelectorAll("div");
-        divList.forEach(element => element.classList.remove("active"));
-        e.classList.add("active");
+        updateActiveClass(divList, e);
 
 
     }
@@ -110,81 +107,75 @@ function screenController() {
         pageBody.replaceChildren();
 
         const divList = document.querySelectorAll("div");
-        divList.forEach(element => element.classList.remove("active"));
-        e.classList.add("active");
+        updateActiveClass(divList, e);
 
 
     }
 
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-    const clickList = (e) => {
-        // Changes contents of .container to match contents of clicked Task
-        pageBody.replaceChildren();
-
-        const divList = document.querySelectorAll("div");
+    const updateActiveClass = (divList, clickedElement) => {
         divList.forEach(element => element.classList.remove("active"));
-        e.classList.add("active");
-
-        const list = listArray[e.id];
-        const projectName = document.createElement("h2");
-        projectName.className = "project-name";
-        projectName.textContent = list.Name;
-        pageBody.appendChild(projectName);
-
-        const taskArray = list.getAllToDoItems();
-        taskArray.forEach((task, index) => {
-            const taskContainer = document.createElement("div");
-            taskContainer.className = "task-container";
-            taskContainer.id = `task-${index}`;
-            
-            const checkbox = generateCheckbox(index);
-            checkbox.id = `checkbox-${index}`;
-            checkbox.addEventListener("click", async () => {
-                try {
-                    checkbox.disabled = true;
-                    taskContainer.classList.add('fade-out');
-                    
-                    await delay(1000);
-                    
-                    // Remove element and update list
-                    const elementToRemove = document.getElementById(`task-${index}`);
-                    if (elementToRemove) {
-                        elementToRemove.remove();
-                        list.deleteToDoItem(index);
-                    }
-                } catch (error) {
-                    console.error('Error during task removal:', error);
-                    checkbox.disabled = false;
-                    taskContainer.classList.remove('fade-out');
-                }
-            });
-
-            const div = document.createElement("div");
-            div.className = "task-wrapper";
-            
-            const title = document.createElement("h4");
-            title.className = "title";
-            const description = document.createElement("span");
-            description.className = "description";
-            const dueDate = document.createElement("span");
-            dueDate.className = "dueDate";
-            const priority = document.createElement("span");
-            priority.className = "priority";
-    
-            title.textContent = task.title;
-            description.textContent = task.description;
-
-            pageBody.appendChild(taskContainer);
-            taskContainer.appendChild(checkbox);
-            taskContainer.appendChild(div);
-            div.appendChild(title);
-            div.appendChild(description);
-            div.appendChild(dueDate);
-            div.appendChild(priority);
+        clickedElement.classList.add("active");
+    };
+      
+    const createPageHeader = (pageName) => {
+        const pageHeader = document.createElement("h2");
+        pageHeader.className = "page-name";
+        pageHeader.textContent = pageName;
+        return pageHeader;
+    };
+      
+    const createTaskContainer = (task, index) => {
+        const taskContainer = document.createElement("div");
+        taskContainer.className = "task-container";
+        taskContainer.id = `task-${index}`;
+      
+        const checkbox = generateCheckbox(index);
+        checkbox.id = `checkbox-${index}`;
+        checkbox.addEventListener("click", async () => {
+          try {
+            checkbox.disabled = true;
+            taskContainer.classList.add('fade-out');
+            await delay(1000);
+            const elementToRemove = document.getElementById(`task-${index}`);
+            if (elementToRemove) {
+              elementToRemove.remove();
+              list.deleteToDoItem(index);
+            }
+          } catch (error) {
+            console.error('Error during task removal:', error);
+            checkbox.disabled = false;
+            taskContainer.classList.remove('fade-out');
+          }
         });
-
-        // Once tasks are printed, add button for adding new tasks
+      
+        const taskWrapper = document.createElement("div");
+        taskWrapper.className = "task-wrapper";
+      
+        const title = document.createElement("h4");
+        title.className = "title";
+        const description = document.createElement("span");
+        description.className = "description";
+        const dueDate = document.createElement("span");
+        dueDate.className = "dueDate";
+        const priority = document.createElement("span");
+        priority.className = "priority";
+      
+        title.textContent = task.title;
+        description.textContent = task.description;
+      
+        taskContainer.appendChild(checkbox);
+        taskContainer.appendChild(taskWrapper);
+        taskWrapper.appendChild(title);
+        taskWrapper.appendChild(description);
+        taskWrapper.appendChild(dueDate);
+        taskWrapper.appendChild(priority);
+      
+        return taskContainer;
+    };
+      
+    const createNewTaskButton = () => {
         const newTaskBtn = document.createElement("button");
         newTaskBtn.classList.add("new-task-btn");
         const plusIcon = document.createElement("i");
@@ -192,12 +183,30 @@ function screenController() {
         plusIcon.classList.add("fa-plus");
         const btnText = document.createElement("span");
         btnText.textContent = "Add Task";
-
-        pageBody.appendChild(newTaskBtn);
         newTaskBtn.appendChild(plusIcon);
         newTaskBtn.appendChild(btnText);
-
-    }
+        return newTaskBtn;
+    };
+      
+    const clickList = (e) => {
+        pageBody.replaceChildren();
+      
+        const divList = document.querySelectorAll("div");
+        updateActiveClass(divList, e);
+      
+        const list = listArray[e.id];
+        const pageHeader = createPageHeader(list.Name);
+        pageBody.appendChild(pageHeader);
+      
+        const taskArray = list.getAllToDoItems();
+        taskArray.forEach((task, index) => {
+          const taskContainer = createTaskContainer(task, index);
+          pageBody.appendChild(taskContainer);
+        });
+      
+        const newTaskBtn = createNewTaskButton();
+        pageBody.appendChild(newTaskBtn);
+    };
 
     const clickNewList = (e) => {
         //Show prompt for list title
