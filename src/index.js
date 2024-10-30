@@ -110,6 +110,8 @@ function screenController() {
 
     }
 
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
     const clickList = (e) => {
         // Changes contents of .container to match contents of clicked Task
         pageBody.replaceChildren();
@@ -125,17 +127,31 @@ function screenController() {
         pageBody.appendChild(projectName);
 
         const taskArray = list.getAllToDoItems();
-        taskArray.forEach(task => {
+        taskArray.forEach((task, index) => {
             const taskContainer = document.createElement("div");
             taskContainer.className = "task-container";
-            taskContainer.id = `task-${taskArray.indexOf(task)}`;
+            taskContainer.id = `task-${index}`;
             
-            const checkbox = generateCheckbox(taskArray.indexOf(task));
-            checkbox.id = `task-${taskArray.indexOf(task)}`;
-            // Attach listener to checkbox to delete container div after a few seconds, based on `task-${taskArray.indexOf(task)}`
-            checkbox.addEventListener("click", () => {
-                document.getElementById(`task-${taskArray.indexOf(task)}`).remove();
-                list.deleteToDoItem(taskArray.indexOf(task));
+            const checkbox = generateCheckbox(index);
+            checkbox.id = `checkbox-${index}`;
+            checkbox.addEventListener("click", async () => {
+                try {
+                    checkbox.disabled = true;
+                    taskContainer.classList.add('fade-out');
+                    
+                    await delay(1000);
+                    
+                    // Remove element and update list
+                    const elementToRemove = document.getElementById(`task-${index}`);
+                    if (elementToRemove) {
+                        elementToRemove.remove();
+                        list.deleteToDoItem(index);
+                    }
+                } catch (error) {
+                    console.error('Error during task removal:', error);
+                    checkbox.disabled = false;
+                    taskContainer.classList.remove('fade-out');
+                }
             });
 
             const div = document.createElement("div");
