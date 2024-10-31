@@ -7,7 +7,7 @@ function screenController() {
     const listNav = document.querySelector(".list-nav");
     const pageBody = document.querySelector(".container");
 
-    const defaultList = new ToDoList("Default Project");
+    const defaultList = new ToDoList("defaultList");
     listArray.push(defaultList);
     const newTaskIndexOne = defaultList.addToDo("Add validator for new project names", "...", "2024-10-31");
     const newTaskIndexTwo = defaultList.addToDo("Import date-fns, make due date changeable", "...", "2024-11-05");
@@ -361,11 +361,12 @@ function screenController() {
     });
 
     const addTask = (title, description, dueDate) => {
-        // const activeList = listArray[document.querySelector("h2").textContent];
-        const newToDo = defaultList.addToDo(title, description, dueDate);
+        const activeElement = document.querySelector(".active");
+        const activeList = listArray[activeElement.id];
+        const newToDo = activeList.addToDo(title, description, dueDate);
         pageBody.replaceChildren();
       
-        const list = defaultList;
+        const list = activeList;
         const pageHeader = createPageHeader(list.Name);
         pageBody.appendChild(pageHeader);
       
