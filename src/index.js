@@ -54,58 +54,72 @@ function screenController() {
         });
     }
 
+    // New List Setup
     const newListBtn = document.querySelector(".new-list-btn");
     newListBtn.addEventListener("click", () => newListPrompt());
 
+    const body = document.querySelector("body");
+    const promptOverlay = document.createElement("div");
+    promptOverlay.classList.add("prompt-overlay");
+    promptOverlay.id = "popup";
+    body.appendChild(promptOverlay);
+    const promptContainer = document.createElement("div");
+    promptContainer.classList.add("prompt-container");
+    promptOverlay.appendChild(promptContainer);
+    const plusIcon = document.createElement("i");
+    plusIcon.classList.add("fa-solid");
+    plusIcon.classList.add("fa-plus");
+    promptContainer.appendChild(plusIcon);
+
+    const promptForm = document.createElement("form");
+    promptForm.action = "";
+    promptForm.method = "post";
+    promptForm.className = "new-list-prompt-form";
+    promptContainer.appendChild(promptForm);
+
+    const promptLine = document.createElement("input");
+    promptLine.type = "text";
+    promptLine.placeholder = "Enter your new project name here..."
+    promptForm.appendChild(promptLine);
+
+    const submitBtn = document.createElement("button");
+    submitBtn.className = "submit-btn";
+    const checkIcon = document.createElement("i");
+    checkIcon.classList.add("fa-solid");
+    checkIcon.classList.add("fa-check");
+    promptForm.appendChild(submitBtn);
+    submitBtn.appendChild(checkIcon);
+
+    promptForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const value = promptLine.value;
+        const newProject = newList(value);
+
+        promptLine.value = "";
+        
+        togglePopup();
+    });
+
+    const togglePopup = () => {
+        const popup = document.getElementById('popup');
+        popup.classList.toggle('active');
+    }
+
+    document.getElementById('popup').addEventListener('click', function(e) { // Arrow functions don't work here...
+        if (e.target === promptOverlay) {  
+            togglePopup();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && document.getElementById('popup').classList.contains('active')) {
+          togglePopup();
+        }
+    });
+
     const newListPrompt = () => {
-        const promptContainer = document.createElement("div");
-        promptContainer.classList.add("prompt-container");
-        pageBody.appendChild(promptContainer);
-
-        const removeClickOffListener = (e) => {
-            if (!promptContainer.contains(e.target)) promptContainer.remove()
-        };
-        pageBody.addEventListener("click", (e) => removeClickOffListener(e));
-
-        const plusIcon = document.createElement("i");
-        plusIcon.classList.add("fa-solid");
-        plusIcon.classList.add("fa-plus");
-        promptContainer.appendChild(plusIcon);
-
-        const promptForm = document.createElement("form");
-        promptForm.action = "";
-        promptForm.method = "post";
-        promptForm.className = "new-list-prompt-form";
-        promptContainer.appendChild(promptForm);
-
-        const promptLine = document.createElement("input");
-        promptLine.type = "text";
-        promptLine.placeholder = "Enter your project name here..."
-        promptForm.appendChild(promptLine);
-
-        const submitBtn = document.createElement("button");
-        submitBtn.className = "submit-btn";
-        const checkIcon = document.createElement("i");
-        checkIcon.classList.add("fa-solid");
-        checkIcon.classList.add("fa-check");
-        promptForm.appendChild(submitBtn);
-        submitBtn.appendChild(checkIcon);
-
-        // Add "enter" key ability to submit name, then call newList(name)
-        promptForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const value = promptLine.value;
-            const newProject = newList(value);
-
-            await delay(1000);
-            promptLine.value = "";
-            promptContainer.remove();
-
-            pageBody.removeEventListener("click", (e) => removeClickOffListener(e));
-        })
-        // Remove promptContainer when done
-        // Remove event listener from pageBody for clickOff
+        togglePopup();
     }
 
     const newList = (name) => {
