@@ -57,7 +57,7 @@ h6 {
     --white: #e9dabd;
     --brwhite: #fdf6e3;
     --accentwhite: #d4b596;
-    --accentwhite50: rgba(212, 181, 150, 0.5);
+    --accentwhite70: rgba(212, 181, 150, 0.7);
 
     /* Accent tones */
     --brblack: #002b36;
@@ -65,6 +65,7 @@ h6 {
     --yellow: #b58900;
     --brred: #cb4b16;
     --red: #dc322f;
+    --red50: rgba(220, 50, 47, 0.5);
     --orange: #ca501e;
     --magenta: #d33682;
     --brmagenta: #6c71c4;
@@ -245,7 +246,7 @@ a {
 }
 
 .task-container:hover {
-    background-color: var(--accentwhite50);
+    background-color: var(--accentwhite70);
 }
 
 .task-container.fade-out {
@@ -303,14 +304,13 @@ a {
     margin: 10px;
     width: 20px;
     font-size: 1.3rem;
-    color: var(--accentwhite);
+    color: var(--red50);
     transition: 0.3s;
 }
 
 .task-right-icons > button > .fa-solid:hover {
-    color: var(--black);
+    color: var(--red);
     transition: 0.3s;
-    opacity: 50%;
 }
 
 .new-task-btn {
