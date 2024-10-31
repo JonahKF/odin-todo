@@ -61,10 +61,10 @@ class ToDoList {
         return this.Index++;
     }
 
-    addToDo (title, description) {
+    addToDo (title, description, dueDate) {
         this.checkTitle(title);
         const index = this.increaseIndex();
-        const toDo = new ToDo(title, description);
+        const toDo = new ToDo(title, description, dueDate);
         this.ToDoList.set(index, toDo);
 
         // Return index for use in DOM later

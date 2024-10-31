@@ -221,16 +221,22 @@ a {
 .container {
     display: flex;
     flex-direction: column;  
-    gap: 25px;
+    /* gap: 25px; */
     padding-top: 60px;
     padding-left: 140px;
     justify-items: center;
 }
 
+.page-name {
+    margin-bottom: 30px;
+}
+
 .task-container {
     display: flex;
     align-items: center;
-    width: 50%;
+    width: 70%;
+    border-top: 1px solid var(--accentwhite);
+    padding: 10px 0 10px 0;
 
     opacity: 1;
     transform: translateX(0);
@@ -250,20 +256,42 @@ a {
     padding-left: 30px;
 }
 
+.title {
+    font-size: 1.1rem;
+}
+
+.due-date {
+    margin-right: 5px;
+    line-height: 10px;
+}
+
+.due-date,
+.date-span {
+    font-size: 0.9rem;
+}
+
+.date-span {
+    color: var(--green);
+    font-weight: 500;
+}
+
 .new-task-btn {
     display: flex;
     align-items: center;
-    width: 200px;
-    height: 40px;
-    margin-left: 90px;
+    width: 70%;
+    height: 60px;
+    padding-bottom: 20px;
+    padding-left: 52px;
+    padding-top: 15px;
     margin-top: 0;
     /* border-radius: 25px; */
     border-top: 1px solid var(--accentwhite);
+    transition: 0.3s;
 }
 
 .new-task-btn > .fa-solid {
     width: 0 !important;
-    margin-right: 30px;
+    margin-right: 45px;
     position: relative;
     top: 1px;
 }
@@ -271,6 +299,50 @@ a {
 .new-task-btn > span {
     font-weight: 600;
     margin-right: 30px;
+}
+
+.new-task-btn:hover {
+    background-color: var(--accentwhite);
+    transition: 0.3s;
+    opacity: 80%;
+    border-radius: 50px;
+}
+
+.prompt-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -120%);
+
+    width: 70%;
+    height: 70px;
+    border-radius: 10px;
+    background-color: var(--brwhite); 
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.35);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.prompt-container > i {
+    font-size: 1.8rem;
+    margin-right: 20px;
+    margin-left: -100px;
+    position: relative;
+    top: 1px;
+
+    transition: 0.3s;
+}
+
+.prompt-container > input {
+    width: 80%;
+    height: 60px;
+    vertical-align: bottom;
+    font-size: 1.8rem;
+
+    background-color: var(--brwhite);
+    border: none;
 }
 
 /* Checkbox, adapted from https://uiverse.io/mrhyddenn/slippery-bear-64 */
