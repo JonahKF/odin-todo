@@ -187,6 +187,20 @@ function screenController() {
         dateSpan.className = "date-span";
         dueDate.textContent = "Due";
         dateSpan.textContent = task.dueDate;
+
+        const rightIcons = document.createElement("div");
+        const editBtn = document.createElement("button");
+        const editIcon = document.createElement("i");
+        const importantBtn = document.createElement("button");
+        const starIcon = document.createElement("i");
+
+        rightIcons.className = "task-right-icons";
+        editBtn.classList.add("edit-btn");
+        importantBtn.classList.add("important-btn");
+        editIcon.classList.add("fa-solid");
+        editIcon.classList.add("fa-pen-to-square");
+        starIcon.classList.add("fa-solid");
+        starIcon.classList.add("fa-star");
       
         taskContainer.appendChild(checkbox);
         taskContainer.appendChild(taskWrapper);
@@ -195,6 +209,12 @@ function screenController() {
         taskWrapper.appendChild(dueDate);
         taskWrapper.appendChild(dateSpan);
         // taskWrapper.appendChild(priority);
+
+        taskContainer.appendChild(rightIcons);
+        rightIcons.appendChild(editBtn);
+        editBtn.appendChild(editIcon);
+        rightIcons.appendChild(importantBtn);
+        importantBtn.appendChild(starIcon);
       
         return taskContainer;
     };
