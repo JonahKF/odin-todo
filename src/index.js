@@ -17,6 +17,7 @@ function screenController() {
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     const displayLists = () => {
+        listNav.textContent = "";
         listArray.forEach(list => {
             const navListContainer = document.createElement("div");
             navListContainer.classList.add("nav-list-container");
@@ -64,7 +65,6 @@ function screenController() {
         const removeClickOffListener = (e) => {
             if (!promptContainer.contains(e.target)) promptContainer.remove()
         };
-
         pageBody.addEventListener("click", (e) => removeClickOffListener(e));
 
         const plusIcon = document.createElement("i");
@@ -72,12 +72,38 @@ function screenController() {
         plusIcon.classList.add("fa-plus");
         promptContainer.appendChild(plusIcon);
 
+        const promptForm = document.createElement("form");
+        promptForm.action = "";
+        promptForm.method = "post";
+        promptForm.className = "new-list-prompt-form";
+        promptContainer.appendChild(promptForm);
+
         const promptLine = document.createElement("input");
         promptLine.type = "text";
         promptLine.placeholder = "Enter your project name here..."
-        promptContainer.appendChild(promptLine);
+        promptForm.appendChild(promptLine);
+
+        const submitBtn = document.createElement("button");
+        submitBtn.className = "submit-btn";
+        const checkIcon = document.createElement("i");
+        checkIcon.classList.add("fa-solid");
+        checkIcon.classList.add("fa-check");
+        promptForm.appendChild(submitBtn);
+        submitBtn.appendChild(checkIcon);
 
         // Add "enter" key ability to submit name, then call newList(name)
+        promptForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const value = promptLine.value;
+            const newProject = newList(value);
+
+            await delay(1000);
+            promptLine.value = "";
+            promptContainer.remove();
+
+            pageBody.removeEventListener("click", (e) => removeClickOffListener(e));
+        })
         // Remove promptContainer when done
         // Remove event listener from pageBody for clickOff
     }
