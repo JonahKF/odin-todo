@@ -3,7 +3,7 @@ class ToDo {
     title,
     description = "",
     dueDate = "",
-    priority = "",
+    priority = false,
     notes = "",
     checklist = ""
   ) {
@@ -36,7 +36,7 @@ class ToDoList {
         this.Name = name;
     }
 
-    checkTitle (title) {
+    checkTitle (title) { // Replace w/ cap on input field length
         //Check if title is valid, > 60 characters
         if(typeof title !== "string" || title.length > 60) {
             throw new Error("Invalid Title");

@@ -563,6 +563,13 @@ a {
     color: var(--brwhite);
 }
 
+::-webkit-datetime-edit-day-field:not([aria-valuetext]),
+::-webkit-datetime-edit-month-field:not([aria-valuetext]),
+::-webkit-datetime-edit-year-field:not([aria-valuetext]) 
+{
+  color: #999;
+}
+
 /* Checkbox, adapted from https://uiverse.io/mrhyddenn/slippery-bear-64 */
 .check {
     cursor: pointer;

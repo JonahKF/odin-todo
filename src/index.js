@@ -81,6 +81,7 @@ function screenController() {
     const promptLine = document.createElement("input");
     promptLine.type = "text";
     promptLine.placeholder = "Enter your new project name here..."
+    promptLine.required = true;
     promptForm.appendChild(promptLine);
 
     const submitBtn = document.createElement("button");
@@ -237,7 +238,9 @@ function screenController() {
 
         rightIcons.className = "task-right-icons";
         editBtn.classList.add("edit-btn");
+        editBtn.id = `edit-btn-${index}`;
         importantBtn.classList.add("important-btn");
+        importantBtn.id = `important-btn-${index}`;
         editIcon.classList.add("fa-solid");
         editIcon.classList.add("fa-pen-to-square");
         starIcon.classList.add("fa-solid");
@@ -254,6 +257,18 @@ function screenController() {
         taskContainer.appendChild(rightIcons);
         rightIcons.appendChild(editBtn);
         editBtn.appendChild(editIcon);
+        editBtn.addEventListener("click", function(e) {
+            const button = e.target.closest('.edit-btn'); // Needed, because the click targets the <i> element
+            console.log("Button ID:", button.id);
+            identifier = parseInt(button.id.split("-")[2]);
+            console.log(identifier);
+            taskPromptTitle.value = "";
+            taskPromptDescription.value = "";
+            taskPromptDueDate.value = "";
+            editFlag = true;
+            toggleTaskPopup();            
+        });
+
         rightIcons.appendChild(importantBtn);
         importantBtn.appendChild(starIcon);
       
@@ -325,6 +340,7 @@ function screenController() {
     taskPromptForm.appendChild(taskPromptTitleIndicator);
     const taskPromptTitle = document.createElement("input");
     taskPromptTitle.type = "text";
+    taskPromptTitle.required = true;
     taskPromptTitle.placeholder = "Enter your new task name here...";
     taskPromptForm.appendChild(taskPromptTitle);
 
@@ -352,8 +368,11 @@ function screenController() {
     const taskPromptDueDate = document.createElement("input");
     taskPromptDueDate.type = "date";
     taskPromptDueDate.placeholder = "...";
+    taskPromptDueDate.required = true;
     taskPromptForm.appendChild(taskPromptDueDate);
 
+    let editFlag = false;
+    let identifier = 100;
     const taskSubmitBtn = document.createElement("button");
     taskSubmitBtn.className = "task-submit-btn";
     const taskCheckIcon = document.createElement("i");
@@ -366,12 +385,41 @@ function screenController() {
         e.preventDefault();
 
         const title = taskPromptTitle.value;
-        console.log(title);
-        const description = "";
-        const dueDate = "";
-        const newProject = addTask(title, description, dueDate);
+        const description = taskPromptDescription.value;
+        const dueDate = taskPromptDueDate.value;
+        if (!editFlag) {const newProject = addTask(title, description, dueDate)}
+        else if (editFlag) {
+            editFlag = false; // Reset editFlag
+            // Edit ToDo item with index identifier
+            const activeElement = document.querySelector(".active");
+            const activeList = listArray[activeElement.id];
+            const activeItem = activeList.ToDoList.get(identifier);
+            activeItem.title = title;
+            activeItem.description = description;
+            activeItem.dueDate = dueDate;
+
+            // Display tasks
+            pageBody.replaceChildren();
+      
+            const list = activeList;
+            const pageHeader = createPageHeader(list.Name);
+            pageBody.appendChild(pageHeader);
+        
+            const taskArray = list.getAllToDoItems();
+            taskArray.forEach((task, index) => {
+            const taskContainer = createTaskContainer(task, index, list);
+            pageBody.appendChild(taskContainer);
+            });
+        
+            const newTaskBtn = createNewTaskButton();
+            newTaskBtn.addEventListener("click", () => toggleTaskPopup());
+
+            pageBody.appendChild(newTaskBtn);
+        };
 
         taskPromptTitle.value = "";
+        taskPromptDescription.value = "";
+        taskPromptDueDate.value = "";
         
         // Turn prompt off
         toggleTaskPopup();
