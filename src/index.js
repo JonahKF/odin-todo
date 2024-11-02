@@ -259,18 +259,39 @@ function screenController() {
         editBtn.appendChild(editIcon);
         editBtn.addEventListener("click", function(e) {
             const button = e.target.closest('.edit-btn'); // Needed, because the click targets the <i> element
-            console.log("Button ID:", button.id);
+            const activeTaskContainer = e.target.closest('.task-container');
+            // console.log("Button ID:", button.id);
             identifier = parseInt(button.id.split("-")[2]);
             console.log(identifier);
-            taskPromptTitle.value = "";
+            taskPromptTitle.value = activeTaskContainer.querySelector(".title").textContent;
             taskPromptDescription.value = "";
-            taskPromptDueDate.value = "";
+            taskPromptDueDate.value = activeTaskContainer.querySelector(".date-span").textContent;
             editFlag = true;
             toggleTaskPopup();            
         });
 
         rightIcons.appendChild(importantBtn);
         importantBtn.appendChild(starIcon);
+        importantBtn.addEventListener("click", function(e) {
+            const button = e.target.closest('.important-btn'); // Needed, because the click targets the <i> element
+            identifier = parseInt(button.id.split("-")[2]);
+
+            const activeElement = document.querySelector(".active");
+            const activeList = listArray[activeElement.id];
+            const activeItem = activeList.ToDoList.get(identifier);
+            const activeItemPriority = activeItem.priority;
+            console.log(activeItemPriority);
+            if (activeItemPriority === false) {
+                activeItem.priority = true;
+                const activeLogo = button.querySelector("i");
+                activeLogo.classList.add("starred");
+            }
+            else if (activeItemPriority === true) {
+                activeItem.priority = false;
+                const activeLogo = button.querySelector("i");
+                activeLogo.classList.remove("starred");
+            }
+        });
       
         return taskContainer;
     };
@@ -431,14 +452,20 @@ function screenController() {
     }
 
     document.getElementById('task-popup').addEventListener('click', function(e) { 
-        if (e.target === taskPromptOverlay) {  
+        if (e.target === taskPromptOverlay) {
+            taskPromptTitle.value = "";
+            taskPromptDescription.value = "";
+            taskPromptDueDate.value = "";
             toggleTaskPopup();
         }
     });
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && document.getElementById('task-popup').classList.contains('active')) {
-          toggleTaskPopup();
+            taskPromptTitle.value = "";
+            taskPromptDescription.value = "";
+            taskPromptDueDate.value = "";
+            toggleTaskPopup();
         }
     });
 

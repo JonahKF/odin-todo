@@ -313,6 +313,11 @@ a {
     transition: 0.3s;
 }
 
+.task-right-icons > button > .fa-solid.starred {
+    color: #b8ac0d;
+    transition: 0.3s;
+}
+
 .new-task-btn {
     display: flex;
     align-items: center;
@@ -512,22 +517,25 @@ a {
 .task-prompt-indicator {
     /* justify-self: center; */
     font-size: 1.2rem;
+    font-weight: 600;
 }
 
 .new-task-prompt-form > input {
     width: 100%;
     height: 60px;
     vertical-align: bottom;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 
-    background-color: var(--brwhite);
-    border: none;
+    border-radius: 10px;
+    background-color: var(--white);
+    border: solid 1px var(--accentwhite);
     padding-left: 20px;
 }
 
 .new-task-prompt-form > input[type="date"] {
     width: 220px;
     cursor: pointer;
+    padding-right: 20px;
 }
 
 .task-submit-btn {
@@ -561,13 +569,6 @@ a {
     border-radius: 50px;
     background-color: var(--green);
     color: var(--brwhite);
-}
-
-::-webkit-datetime-edit-day-field:not([aria-valuetext]),
-::-webkit-datetime-edit-month-field:not([aria-valuetext]),
-::-webkit-datetime-edit-year-field:not([aria-valuetext]) 
-{
-  color: #999;
 }
 
 /* Checkbox, adapted from https://uiverse.io/mrhyddenn/slippery-bear-64 */
