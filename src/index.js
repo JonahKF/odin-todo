@@ -7,7 +7,7 @@ function screenController() {
     const listNav = document.querySelector(".list-nav");
     const pageBody = document.querySelector(".container");
 
-    const defaultList = new ToDoList("defaultList");
+    const defaultList = new ToDoList("Default List");
     listArray.push(defaultList);
     const newTaskIndexOne = defaultList.addToDo("Add validator for new project names", "...", "2024-10-31");
     const newTaskIndexTwo = defaultList.addToDo("Import date-fns, make due date changeable", "...", "2024-11-05");
@@ -304,24 +304,58 @@ function screenController() {
     const taskPromptContainer = document.createElement("div");
     taskPromptContainer.classList.add("task-prompt-container");
     taskPromptOverlay.appendChild(taskPromptContainer);
-    const taskPlusIcon = document.createElement("i");
-    taskPlusIcon.classList.add("fa-solid");
-    taskPlusIcon.classList.add("fa-plus");
-    taskPromptContainer.appendChild(taskPlusIcon);
+    // const taskPlusIcon = document.createElement("i");
+    // taskPlusIcon.classList.add("fa-solid");
+    // taskPlusIcon.classList.add("fa-plus");
+    // taskPromptContainer.appendChild(taskPlusIcon);
 
-    const taskPromptForm = document.createElement("form");
+    const taskPromptForm = document.createElement("form"); // Grid Start
     taskPromptForm.action = "";
     taskPromptForm.method = "post";
     taskPromptForm.className = "new-task-prompt-form";
     taskPromptContainer.appendChild(taskPromptForm);
 
+    const taskPromptTitleIcon = document.createElement("i");
+    taskPromptTitleIcon.classList.add("fa-solid");
+    taskPromptTitleIcon.classList.add("fa-plus");
+    taskPromptForm.appendChild(taskPromptTitleIcon);
+    const taskPromptTitleIndicator = document.createElement("div");
+    taskPromptTitleIndicator.classList.add("task-prompt-indicator");
+    taskPromptTitleIndicator.textContent = "Task name: "
+    taskPromptForm.appendChild(taskPromptTitleIndicator);
     const taskPromptTitle = document.createElement("input");
     taskPromptTitle.type = "text";
     taskPromptTitle.placeholder = "Enter your new task name here...";
     taskPromptForm.appendChild(taskPromptTitle);
 
+    const taskPromptDescriptionIcon = document.createElement("i");
+    taskPromptDescriptionIcon.classList.add("fa-solid");
+    taskPromptDescriptionIcon.classList.add("fa-plus");
+    taskPromptForm.appendChild(taskPromptDescriptionIcon);
+    const taskPromptDescriptionIndicator = document.createElement("div");
+    taskPromptDescriptionIndicator.classList.add("task-prompt-indicator");
+    taskPromptDescriptionIndicator.textContent = "Task description: "
+    taskPromptForm.appendChild(taskPromptDescriptionIndicator);
+    const taskPromptDescription = document.createElement("input");
+    taskPromptDescription.type = "textarea";
+    taskPromptDescription.placeholder = "Enter a description here (optional) ...";
+    taskPromptForm.appendChild(taskPromptDescription);
+
+    const taskPromptDueDateIcon = document.createElement("i");
+    taskPromptDueDateIcon.classList.add("fa-solid");
+    taskPromptDueDateIcon.classList.add("fa-plus");
+    taskPromptForm.appendChild(taskPromptDueDateIcon);
+    const taskPromptDueDateIndicator = document.createElement("div");
+    taskPromptDueDateIndicator.classList.add("task-prompt-indicator");
+    taskPromptDueDateIndicator.textContent = "Due date: "
+    taskPromptForm.appendChild(taskPromptDueDateIndicator);
+    const taskPromptDueDate = document.createElement("input");
+    taskPromptDueDate.type = "date";
+    taskPromptDueDate.placeholder = "...";
+    taskPromptForm.appendChild(taskPromptDueDate);
+
     const taskSubmitBtn = document.createElement("button");
-    taskSubmitBtn.className = "submit-btn";
+    taskSubmitBtn.className = "task-submit-btn";
     const taskCheckIcon = document.createElement("i");
     taskCheckIcon.classList.add("fa-solid");
     taskCheckIcon.classList.add("fa-check");
@@ -418,7 +452,6 @@ function screenController() {
         return checkBtn;
     };
 
-
     // Generate Default List
     displayLists();
 
@@ -433,6 +466,8 @@ function screenController() {
     important.addEventListener("click", () => clickImportant(important));
     allTasks.addEventListener("click", () => ClickAllTasks(allTasks));
 
+    // Start on Home page
+    clickHome(home);
 }
 
 
