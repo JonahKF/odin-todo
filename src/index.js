@@ -245,6 +245,11 @@ function screenController() {
         editIcon.classList.add("fa-pen-to-square");
         starIcon.classList.add("fa-solid");
         starIcon.classList.add("fa-star");
+        const activeElement = document.querySelector(".active");
+        const activeList = listArray[activeElement.id];
+        if (activeList.ToDoList.get(index).priority) {
+            starIcon.classList.add("starred");
+        };
       
         taskContainer.appendChild(checkbox);
         taskContainer.appendChild(taskWrapper);

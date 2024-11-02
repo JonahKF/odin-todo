@@ -65,7 +65,7 @@ h6 {
     --yellow: #b58900;
     --brred: #cb4b16;
     --red: #dc322f;
-    --red50: rgba(220, 50, 47, 0.5);
+    --red25: rgba(220, 50, 47, 0.25);
     --orange: #ca501e;
     --magenta: #d33682;
     --brmagenta: #6c71c4;
@@ -304,17 +304,23 @@ a {
     margin: 10px;
     width: 20px;
     font-size: 1.3rem;
-    color: var(--red50);
+    color: var(--red25);
     transition: 0.3s;
 }
 
 .task-right-icons > button > .fa-solid:hover {
     color: var(--red);
+    -webkit-text-fill-color: var(--red);
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: var(--red);
     transition: 0.3s;
 }
 
 .task-right-icons > button > .fa-solid.starred {
-    color: #b8ac0d;
+    color: #f9ed69;
+    -webkit-text-fill-color: #f9ed69;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: var(--brblack);
     transition: 0.3s;
 }
 
