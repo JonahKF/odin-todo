@@ -223,7 +223,8 @@ function screenController() {
                 
                 // Refresh the entire list
                 const activeSidebar = document.querySelector(".active");
-                clickList(activeSidebar);
+                if (activeSidebar.classList.contains("all-tasks")) ClickAllTasks(activeSidebar);
+                else clickList(activeSidebar);
                 
             } catch (error) {
                 console.error('Error during task removal:', error);
