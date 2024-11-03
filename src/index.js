@@ -182,9 +182,9 @@ function screenController() {
             listTaskWrapper.classList.add("list-task-wrapper");
             listTaskWrapper.id = (`list-id-${num}`);
             listTaskWrapper.appendChild(subListName);
+            pageBody.appendChild(listTaskWrapper);
             taskArray.forEach((task, index) => {
                 const taskContainer = createTaskContainer(task, index, list);
-                pageBody.appendChild(listTaskWrapper);
                 listTaskWrapper.appendChild(taskContainer);
             });
         });
@@ -205,27 +205,34 @@ function screenController() {
     const createTaskContainer = (task, index, list) => {
         const taskContainer = document.createElement("div");
         taskContainer.className = "task-container";
-        taskContainer.id = `task-${index}`;
-      
+        taskContainer.dataset.taskIndex = index; // Use dataset instead of id for better tracking
+        
         const checkbox = generateCheckbox(index);
         checkbox.id = `checkbox-${index}`;
         checkbox.addEventListener("click", async () => {
-          try {
-            checkbox.disabled = true;
-            taskContainer.classList.add('fade-out');
-            await delay(1000);
-            const elementToRemove = document.getElementById(`task-${index}`);
-            if (elementToRemove) {
-              elementToRemove.remove();
-              list.deleteToDoItem(index);
+            try {
+                // Disable the checkbox immediately to prevent double-clicks
+                const checkboxInput = checkbox.querySelector('input');
+                checkboxInput.disabled = true;
+                
+                taskContainer.classList.add('fade-out');
+                await delay(1000);
+                
+                const currentIndex = parseInt(taskContainer.dataset.taskIndex);
+                list.deleteToDoItem(currentIndex);
+                
+                // Refresh the entire list
+                const activeSidebar = document.querySelector(".active");
+                clickList(activeSidebar);
+                
+            } catch (error) {
+                console.error('Error during task removal:', error);
+                const checkboxInput = checkbox.querySelector('input');
+                checkboxInput.disabled = false;
+                taskContainer.classList.remove('fade-out');
             }
-          } catch (error) {
-            console.error('Error during task removal:', error);
-            checkbox.disabled = false;
-            taskContainer.classList.remove('fade-out');
-          }
         });
-      
+
         const taskWrapper = document.createElement("div");
         taskWrapper.className = "task-wrapper";
       
@@ -261,6 +268,12 @@ function screenController() {
         editIcon.classList.add("fa-pen-to-square");
         starIcon.classList.add("fa-solid");
         starIcon.classList.add("fa-star");
+
+        console.log(list.ToDoList);
+        console.log("The index:" + index);
+        console.log(list.ToDoList.get(index));
+        console.log("The priority:" + list.ToDoList.get(index).priority);
+
         // const activeElement = document.querySelector(".active");
         // const activeList = listArray[activeElement.id];
         if (list.ToDoList.get(index).priority) {
@@ -280,10 +293,9 @@ function screenController() {
         editBtn.appendChild(editIcon);
         editBtn.addEventListener("click", function(e) {
             const button = e.target.closest('.edit-btn'); // Needed, because the click targets the <i> element
-            const activeTaskContainer = e.target.closest('.task-container');
-            // console.log("Button ID:", button.id);
             identifier = parseInt(button.id.split("-")[2]);
-            console.log(identifier);
+
+            const activeTaskContainer = e.target.closest('.task-container');
             taskPromptTitle.value = activeTaskContainer.querySelector(".title").textContent;
             taskPromptDescription.value = "";
             taskPromptDueDate.value = activeTaskContainer.querySelector(".date-span").textContent;
@@ -344,15 +356,18 @@ function screenController() {
       
         const divList = document.querySelectorAll("div");
         updateActiveClass(divList, e);
-      
+
         const list = listArray[e.id];
         const pageHeader = createPageHeader(list.Name);
         pageBody.appendChild(pageHeader);
-      
+        const listTaskWrapper = document.createElement("div");
+        listTaskWrapper.classList.add("list-task-wrapper");
+        listTaskWrapper.id = (`list-id-${e.id}`);
+        pageBody.appendChild(listTaskWrapper);
         const taskArray = list.getAllToDoItems();
         taskArray.forEach((task, index) => {
           const taskContainer = createTaskContainer(task, index, list);
-          pageBody.appendChild(taskContainer);
+          listTaskWrapper.appendChild(taskContainer);
         });
       
         const newTaskBtn = createNewTaskButton();
@@ -423,7 +438,7 @@ function screenController() {
     taskPromptForm.appendChild(taskPromptDueDate);
 
     let editFlag = false;
-    let identifier = 100;
+    let identifier = 10000;
     const taskSubmitBtn = document.createElement("button");
     taskSubmitBtn.className = "task-submit-btn";
     const taskCheckIcon = document.createElement("i");

@@ -49,8 +49,21 @@ class ToDoList {
         return ToDoItem.toJSON();
     }
 
-    deleteToDoItem (index) {
-        this.ToDoList.delete(index);
+    deleteToDoItem (indexToDelete) {
+        // Create a new Map to store reindexed items
+        const newMap = new Map();
+        let newIndex = 0;
+        
+        // Iterate through all items and reindex them
+        this.ToDoList.forEach((value, key) => {
+            if (key !== indexToDelete) {
+                newMap.set(newIndex, value);
+                newIndex++;
+            }
+        });
+        
+        // Replace the old map with the reindexed one
+        this.ToDoList = newMap;
     }
 
     getAllToDoItems() {
