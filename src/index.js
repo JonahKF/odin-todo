@@ -173,11 +173,19 @@ function screenController() {
         const pageHeader = createPageHeader(e.textContent);
         pageBody.appendChild(pageHeader);
 
-        listArray.forEach((list) => {
+        listArray.forEach((list, num) => {
+            const subListName = document.createElement("h3");
+            subListName.textContent = list.Name;
+            subListName.className = `${num}`;
             const taskArray = list.getAllToDoItems();
+            const listTaskWrapper = document.createElement("div");
+            listTaskWrapper.classList.add("list-task-wrapper");
+            listTaskWrapper.id = (`list-id-${num}`);
+            listTaskWrapper.appendChild(subListName);
             taskArray.forEach((task, index) => {
                 const taskContainer = createTaskContainer(task, index, list);
-                pageBody.appendChild(taskContainer);
+                pageBody.appendChild(listTaskWrapper);
+                listTaskWrapper.appendChild(taskContainer);
             });
         });
     }
@@ -289,9 +297,18 @@ function screenController() {
             const button = e.target.closest('.important-btn'); // Needed, because the click targets the <i> element
             identifier = parseInt(button.id.split("-")[2]);
 
-            const activeElement = document.querySelector(".active");
-            const activeList = listArray[activeElement.id];
-            const activeItem = activeList.ToDoList.get(identifier);
+            const taskContainer = e.target.closest('.list-task-wrapper');
+
+            let targetList;
+            if (taskContainer) {
+                const listIdentifier = parseInt(taskContainer.id.split("-")[2]);
+                targetList = listArray[listIdentifier];
+            } else {
+                const listName = document.querySelector(".page-name").textContent;
+                targetList = listArray.find(list => list.Name === listName);
+            } 
+
+            const activeItem = targetList.ToDoList.get(identifier);
             const activeItemPriority = activeItem.priority;
             console.log(activeItemPriority);
             if (activeItemPriority === false) {
