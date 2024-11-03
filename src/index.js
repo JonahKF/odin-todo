@@ -172,6 +172,14 @@ function screenController() {
 
         const pageHeader = createPageHeader(e.textContent);
         pageBody.appendChild(pageHeader);
+
+        listArray.forEach((list) => {
+            const taskArray = list.getAllToDoItems();
+            taskArray.forEach((task, index) => {
+                const taskContainer = createTaskContainer(task, index, list);
+                pageBody.appendChild(taskContainer);
+            });
+        });
     }
 
     const updateActiveClass = (divList, clickedElement) => {
@@ -245,9 +253,9 @@ function screenController() {
         editIcon.classList.add("fa-pen-to-square");
         starIcon.classList.add("fa-solid");
         starIcon.classList.add("fa-star");
-        const activeElement = document.querySelector(".active");
-        const activeList = listArray[activeElement.id];
-        if (activeList.ToDoList.get(index).priority) {
+        // const activeElement = document.querySelector(".active");
+        // const activeList = listArray[activeElement.id];
+        if (list.ToDoList.get(index).priority) {
             starIcon.classList.add("starred");
         };
       
