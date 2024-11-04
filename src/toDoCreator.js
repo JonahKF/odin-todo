@@ -64,6 +64,7 @@ class ToDoList {
         
         // Replace the old map with the reindexed one
         this.ToDoList = newMap;
+        this.Index = newIndex;
     }
 
     getAllToDoItems() {

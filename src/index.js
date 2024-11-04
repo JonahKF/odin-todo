@@ -2,11 +2,12 @@ import "./styles.css";
 import { ToDoList } from "./toDoCreator.js"
 
 function screenController() {
+    // Initialize list array & page body
     const listArray = [];
-
     const listNav = document.querySelector(".list-nav");
     const pageBody = document.querySelector(".container");
 
+    // For Testing
     const defaultList = new ToDoList("Default List");
     listArray.push(defaultList);
     const newTaskIndexOne = defaultList.addToDo("Add validator for new project names", "...", "2024-10-31");
@@ -14,6 +15,7 @@ function screenController() {
     const newTaskIndexThree = defaultList.addToDo("Add colors based on due date relation to today", "...", "2024-11-07");
     const newTaskIndexFour = defaultList.addToDo("Allow users to make task important with star click", "...", "2024-11-13");
     const newTaskIndexFive = defaultList.addToDo("Add click functionality to edit button on task", "...", "2024-11-23");
+
 
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -55,7 +57,7 @@ function screenController() {
         });
     }
 
-    // New List Setup
+    // New List Prompt & Popup Setup
     const newListBtn = document.querySelector(".new-list-btn");
     newListBtn.addEventListener("click", () => newListPrompt());
 
@@ -97,14 +99,13 @@ function screenController() {
 
         const value = promptLine.value;
         const newProject = newList(value);
-
-        promptLine.value = "";
         
         togglePopup();
     });
 
     const togglePopup = () => {
         const popup = document.getElementById('popup');
+        promptLine.value = "";
         popup.classList.toggle('active');
     }
 
@@ -142,6 +143,10 @@ function screenController() {
 
         const pageHeader = createPageHeader(e.textContent);
         pageBody.appendChild(pageHeader);
+
+        // Code for displaying home screen goes here
+
+        // Add headers for "Today is: ", "Your tasks for today are: ", "Your tasks for tomorrow are: "
     }
 
     const clickToday = (e) => {
@@ -152,6 +157,8 @@ function screenController() {
 
         const pageHeader = createPageHeader(e.textContent);
         pageBody.appendChild(pageHeader);
+
+        // Display items with due date today
     }
 
     const clickImportant = (e) => {
@@ -162,9 +169,12 @@ function screenController() {
 
         const pageHeader = createPageHeader(e.textContent);
         pageBody.appendChild(pageHeader);
+
+        // Display items flagged priority = true
+        // If none, display a message
     }
 
-    const ClickAllTasks = (e) => {
+    const clickAllTasks = (e) => {
         pageBody.replaceChildren();
 
         const divList = document.querySelectorAll("div");
@@ -173,22 +183,29 @@ function screenController() {
         const pageHeader = createPageHeader(e.textContent);
         pageBody.appendChild(pageHeader);
 
+        displayAllTasks();
+    };
+
+    const displayAllTasks = () => {
         listArray.forEach((list, num) => {
             const subListName = document.createElement("h3");
             subListName.textContent = list.Name;
             subListName.className = `${num}`;
-            const taskArray = list.getAllToDoItems();
+
             const listTaskWrapper = document.createElement("div");
             listTaskWrapper.classList.add("list-task-wrapper");
-            listTaskWrapper.id = (`list-id-${num}`);
             listTaskWrapper.appendChild(subListName);
+
+            listTaskWrapper.id = (`list-id-${num}`);
             pageBody.appendChild(listTaskWrapper);
+
+            const taskArray = list.getAllToDoItems();
             taskArray.forEach((task, index) => {
                 const taskContainer = createTaskContainer(task, index, list);
                 listTaskWrapper.appendChild(taskContainer);
             });
         });
-    }
+    };
 
     const updateActiveClass = (divList, clickedElement) => {
         divList.forEach(element => element.classList.remove("active"));
@@ -205,34 +222,9 @@ function screenController() {
     const createTaskContainer = (task, index, list) => {
         const taskContainer = document.createElement("div");
         taskContainer.className = "task-container";
-        taskContainer.dataset.taskIndex = index; // Use dataset instead of id for better tracking
+        taskContainer.dataset.taskIndex = index;
         
-        const checkbox = generateCheckbox(index);
-        checkbox.id = `checkbox-${index}`;
-        checkbox.addEventListener("click", async () => {
-            try {
-                // Disable the checkbox immediately to prevent double-clicks
-                const checkboxInput = checkbox.querySelector('input');
-                checkboxInput.disabled = true;
-                
-                taskContainer.classList.add('fade-out');
-                await delay(1000);
-                
-                const currentIndex = parseInt(taskContainer.dataset.taskIndex);
-                list.deleteToDoItem(currentIndex);
-                
-                // Refresh the entire list
-                const activeSidebar = document.querySelector(".active");
-                if (activeSidebar.classList.contains("all-tasks")) ClickAllTasks(activeSidebar);
-                else clickList(activeSidebar);
-                
-            } catch (error) {
-                console.error('Error during task removal:', error);
-                const checkboxInput = checkbox.querySelector('input');
-                checkboxInput.disabled = false;
-                taskContainer.classList.remove('fade-out');
-            }
-        });
+        const newCheckBox = addCheckBox(index, taskContainer, list);
 
         const taskWrapper = document.createElement("div");
         taskWrapper.className = "task-wrapper";
@@ -270,18 +262,16 @@ function screenController() {
         starIcon.classList.add("fa-solid");
         starIcon.classList.add("fa-star");
 
-        console.log(list.ToDoList);
-        console.log("The index:" + index);
-        console.log(list.ToDoList.get(index));
-        console.log("The priority:" + list.ToDoList.get(index).priority);
+        console.log(task);
+        console.log(task.priority);
 
         // const activeElement = document.querySelector(".active");
         // const activeList = listArray[activeElement.id];
-        if (list.ToDoList.get(index).priority) {
+        if (task.priority) {
             starIcon.classList.add("starred");
         };
       
-        taskContainer.appendChild(checkbox);
+        taskContainer.appendChild(newCheckBox);
         taskContainer.appendChild(taskWrapper);
         taskWrapper.appendChild(title);
         // taskWrapper.appendChild(description);
@@ -361,10 +351,12 @@ function screenController() {
         const list = listArray[e.id];
         const pageHeader = createPageHeader(list.Name);
         pageBody.appendChild(pageHeader);
+
         const listTaskWrapper = document.createElement("div");
         listTaskWrapper.classList.add("list-task-wrapper");
         listTaskWrapper.id = (`list-id-${e.id}`);
         pageBody.appendChild(listTaskWrapper);
+
         const taskArray = list.getAllToDoItems();
         taskArray.forEach((task, index) => {
           const taskContainer = createTaskContainer(task, index, list);
@@ -373,7 +365,6 @@ function screenController() {
       
         const newTaskBtn = createNewTaskButton();
         newTaskBtn.addEventListener("click", () => toggleTaskPopup());
-        // Attach event listener to newTaskBtn, calling addTask
 
         pageBody.appendChild(newTaskBtn);
     };
@@ -573,6 +564,37 @@ function screenController() {
         return checkBtn;
     };
 
+    const addCheckBox = (index, taskContainer, list) => {
+        const checkbox = generateCheckbox(index);
+        checkbox.id = `checkbox-${index}`;
+        checkbox.addEventListener("click", async () => {
+            try {
+                // Disable the checkbox immediately to prevent double-clicks
+                const checkboxInput = checkbox.querySelector('input');
+                checkboxInput.disabled = true;
+                
+                taskContainer.classList.add('fade-out');
+                await delay(1000);
+                
+                const currentIndex = parseInt(taskContainer.dataset.taskIndex);
+                list.deleteToDoItem(currentIndex);
+                
+                // Refresh the entire list
+                const activeSidebar = document.querySelector(".active");
+                if (activeSidebar.classList.contains("all-tasks")) clickAllTasks(activeSidebar);
+                else clickList(activeSidebar);
+                
+            } catch (error) {
+                console.error('Error during task removal:', error);
+                const checkboxInput = checkbox.querySelector('input');
+                checkboxInput.disabled = false;
+                taskContainer.classList.remove('fade-out');
+            }
+        });
+
+        return checkbox;
+    };
+
     // Generate Default List
     displayLists();
 
@@ -585,7 +607,7 @@ function screenController() {
     home.addEventListener("click", () => clickHome(home));
     today.addEventListener("click", () => clickToday(today));
     important.addEventListener("click", () => clickImportant(important));
-    allTasks.addEventListener("click", () => ClickAllTasks(allTasks));
+    allTasks.addEventListener("click", () => clickAllTasks(allTasks));
 
     // Start on Home page
     clickHome(home);
