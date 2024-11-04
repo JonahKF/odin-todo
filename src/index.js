@@ -1,5 +1,6 @@
 import "./styles.css";
 import { ToDoList } from "./toDoCreator.js"
+import { parse, format, isValid } from 'date-fns';
 
 function screenController() {
     // Initialize list array & page body
@@ -231,15 +232,10 @@ function screenController() {
       
         const title = document.createElement("div");
         title.className = "title";
-        // const description = document.createElement("span");
-        // description.className = "description";
         const dueDate = document.createElement("span");
         dueDate.className = "due-date";
-        const priority = document.createElement("span");
-        priority.className = "priority";
       
         title.textContent = task.title;
-        // description.textContent = task.description;
 
         const dateSpan = document.createElement("span");
         dateSpan.className = "date-span";
@@ -261,12 +257,6 @@ function screenController() {
         editIcon.classList.add("fa-pen-to-square");
         starIcon.classList.add("fa-solid");
         starIcon.classList.add("fa-star");
-
-        console.log(task);
-        console.log(task.priority);
-
-        // const activeElement = document.querySelector(".active");
-        // const activeList = listArray[activeElement.id];
         if (task.priority) {
             starIcon.classList.add("starred");
         };
@@ -274,10 +264,8 @@ function screenController() {
         taskContainer.appendChild(newCheckBox);
         taskContainer.appendChild(taskWrapper);
         taskWrapper.appendChild(title);
-        // taskWrapper.appendChild(description);
         taskWrapper.appendChild(dueDate);
         taskWrapper.appendChild(dateSpan);
-        // taskWrapper.appendChild(priority);
 
         taskContainer.appendChild(rightIcons);
         rightIcons.appendChild(editBtn);
@@ -444,7 +432,7 @@ function screenController() {
 
         const title = taskPromptTitle.value;
         const description = taskPromptDescription.value;
-        const dueDate = taskPromptDueDate.value;
+        const dueDate = formatDateInput(taskPromptDueDate.value);
         if (!editFlag) {const newProject = addTask(title, description, dueDate)}
         else if (editFlag) {
             editFlag = false; // Reset editFlag
@@ -594,6 +582,44 @@ function screenController() {
 
         return checkbox;
     };
+
+    const formatDateInput = (inputValue) => {
+        console.log("formatDateInput started")
+
+        const possibleFormats = [
+          'yyyy-MM-dd',     // 2024-01-31
+          'MM/dd/yyyy',     // 01/31/2024
+          'dd/MM/yyyy',     // 31/01/2024
+          'MM-dd-yyyy',     // 01-31-2024
+          'dd-MM-yyyy',     // 31-01-2024
+          'dd.MM.yyyy',     // 31.01.2024
+          'yyyy.MM.dd'      // 2024.01.31
+        ];
+      
+        let parsedDate = null;
+      
+        // First try to create a date object directly (handles ISO strings)
+        const directDate = new Date(inputValue);
+        if (isValid(directDate)) {
+          parsedDate = directDate;
+        } else {
+          // Try each format until we find one that works
+          for (const dateFormat of possibleFormats) {
+            const attemptParse = parse(inputValue, dateFormat, new Date());
+            if (isValid(attemptParse)) {
+              parsedDate = attemptParse;
+              break;
+            }
+          }
+        }
+      
+        if (!parsedDate) {
+          throw new Error('Unable to parse date from input');
+        }
+      
+        // Format to YYYY-MM-DD
+        return format(parsedDate, 'yyyy-MM-dd');
+      }
 
     // Generate Default List
     displayLists();
