@@ -6,26 +6,37 @@ class ToDo {
     priority = false,
     notes = "",
     checklist = ""
-  ) {
-    this.title = title;
-    this.description = description;
-    this.dueDate = dueDate;
-    this.priority = priority;
-    this.notes = notes;
-    this.checklist = checklist;
-  }
+    ) {
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.priority = priority;
+        this.notes = notes;
+        this.checklist = checklist;
+    }
 
   toJSON() {
     return {
-        //Converts to JSON
-        title: this.title,
-        description: this.description,
-        dueDate: this.dueDate,
-        priority: this.priority,
-        notes: this.notes,
-        checklist: this.checklist
-    };
-  }
+            //Converts to JSON
+            title: this.title,
+            description: this.description,
+            dueDate: this.dueDate,
+            priority: this.priority,
+            notes: this.notes,
+            checklist: this.checklist
+        };
+    }
+
+  static fromJSON(data) {
+    return new ToDo(
+            data.title,
+            data.description,
+            data.dueDate,
+            data.priority,
+            data.notes,
+            data.checklist
+        );
+    }
 }
 
 // Controller Class
@@ -34,6 +45,41 @@ class ToDoList {
         this.ToDoList = new Map(); // Using Maps, recommended by StackOverflow
         this.Index = 0;
         this.Name = name;
+        this.loadFromStorage();
+    }
+
+    saveToStorage() {
+        const saveData = {
+            todos: Array.from(this.ToDoList.entries()),
+            index: this.Index,
+            name: this.Name
+        };
+        localStorage.setItem('todoList', JSON.stringify(saveData));
+    }
+
+    loadFromStorage() {
+        const savedData = localStorage.getItem('todoList');
+        if (savedData) {
+            const parsed = JSON.parse(savedData);
+            this.Name = parsed.name;
+            this.Index = parsed.index;
+            
+            // Clear existing map and rebuild from saved data
+            this.ToDoList.clear();
+            parsed.todos.forEach(([key, value]) => {
+                this.ToDoList.set(Number(key), ToDo.fromJSON(value));
+            });
+        }
+    }
+
+    // Call when updating in index.js
+    updateToDo(index, updates) {
+        const todo = this.ToDoList.get(index);
+        if (!todo) return false;
+
+        Object.assign(todo, updates);
+        this.saveToStorage(); // Save after updating
+        return true;
     }
 
     checkTitle (title) { // Replace w/ cap on input field length
@@ -80,9 +126,16 @@ class ToDoList {
         const index = this.increaseIndex();
         const toDo = new ToDo(title, description, dueDate);
         this.ToDoList.set(index, toDo);
+        this.saveToStorage();
 
         // Return index for use in DOM later
         return index;
+    }
+
+    clearStorage() {
+        localStorage.removeItem('todoList');
+        this.ToDoList.clear();
+        this.Index = 0;
     }
 
 }

@@ -11,11 +11,11 @@ function screenController() {
     // For Testing
     const defaultList = new ToDoList("Default List");
     listArray.push(defaultList);
-    const newTaskIndexOne = defaultList.addToDo("Add validator for new project names", "...", "2024-10-31");
-    const newTaskIndexTwo = defaultList.addToDo("Add task btn on All Tasks page", "...", "2024-11-05");
-    const newTaskIndexThree = defaultList.addToDo("Add colors based on due date relation to today", "...", "2024-11-07");
-    const newTaskIndexFour = defaultList.addToDo("Home and Today screens", "...", "2024-11-13");
-    const newTaskIndexFive = defaultList.addToDo("Settings pane (even if placeholder)", "...", "2024-11-23");
+    // const newTaskIndexOne = defaultList.addToDo("Add validator for new project names", "...", "2024-10-31");
+    // const newTaskIndexTwo = defaultList.addToDo("Add task btn on All Tasks page", "...", "2024-11-04");
+    // const newTaskIndexThree = defaultList.addToDo("Add colors based on due date relation to today", "...", "2024-11-07");
+    // const newTaskIndexFour = defaultList.addToDo("Home and Today screens", "...", "2024-11-13");
+    // const newTaskIndexFive = defaultList.addToDo("Settings pane (even if placeholder)", "...", "2024-11-23");
 
 
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -85,6 +85,8 @@ function screenController() {
     promptLine.type = "text";
     promptLine.placeholder = "Enter your new project name here..."
     promptLine.required = true;
+    promptLine.minLength = "3";
+    promptLine.maxLength = "60";
     promptForm.appendChild(promptLine);
 
     const submitBtn = document.createElement("button");
@@ -148,6 +150,104 @@ function screenController() {
         // Code for displaying home screen goes here
 
         // Add headers for "Today is: ", "Your tasks for today are: ", "Your tasks for tomorrow are: "
+        const welcomeDiv = document.createElement("div");
+        welcomeDiv.className = "welcome-div";
+
+        const welcomeText = document.createElement("div");
+        welcomeText.textContent = "Hello.";
+        welcomeText.className = "welcome-text";
+
+        const homeCardsContainer = document.createElement("div");
+        homeCardsContainer.className = "home-cards-container";
+
+        const todayDateCard = document.createElement("div");
+        todayDateCard.className = "today-date-card";
+        todayDateCard.classList.add("home-card");
+
+        const todayGreeting = document.createElement("div");
+        todayGreeting.className = "today-greeting";
+        todayGreeting.textContent = "Today is ";
+        const todayDate = document.createElement("div");
+        todayDate.className = "today-date";
+        const todayDayOfWeek = format(new Date(), "PPPP");
+        todayDate.textContent = `${todayDayOfWeek}.`;
+
+        const btnContainer = document.createElement("div");
+        btnContainer.className = "home-btn-container"
+
+        // Today's tasks button
+        const todayReminderBtn = document.createElement("button");
+        todayReminderBtn.classList.add("home-btn");
+        todayReminderBtn.classList.add("today-reminder");
+        todayReminderBtn.addEventListener("click", () => {
+            const todayMenuItem = document.querySelector(".today");
+            clickToday(todayMenuItem);
+        });
+
+        const todayTasksCount = () => {
+            let counter = 0;
+            const todayDate = format(new Date(), "yyyy-MM-dd");
+
+            listArray.forEach((list) => {
+                const taskArray = list.getAllToDoItems();
+                taskArray.forEach((task) => {
+                    if (task.dueDate === todayDate) {
+                        counter++;
+                    }
+                });
+            });
+
+            return counter;
+        };
+
+        let todaysTasks = todayTasksCount();
+        const todayReminderBtnTopText = document.createElement("div");
+        if (todaysTasks === 1) todayReminderBtnTopText.textContent = `You have ${todaysTasks} task due today.`;
+        else todayReminderBtnTopText.textContent = `You have ${todaysTasks} tasks due today.`;
+        
+
+        // Important tasks button
+        const importantReminderBtn = document.createElement("button");
+        importantReminderBtn.classList.add("home-btn");
+        importantReminderBtn.classList.add("important-reminder");
+        importantReminderBtn.addEventListener("click", () => {
+            const importantMenuItem = document.querySelector(".important");
+            clickImportant(importantMenuItem);
+        });
+
+        const importantTasksCount = () => {
+            let counter = 0;
+
+            listArray.forEach((list) => {
+                const taskArray = list.getAllToDoItems();
+                taskArray.forEach((task) => {
+                    if (task.priority === true) {
+                        counter++;
+                    }
+                });
+            });
+
+            return counter;
+        };
+
+        let importantTasks = importantTasksCount();
+        const importantReminderBtnTopText = document.createElement("div");
+        if (importantTasks === 1) importantReminderBtnTopText.textContent = `You have ${importantTasks} important task.`;
+        else importantReminderBtnTopText.textContent = `You have ${importantTasks} important tasks.`;
+
+
+        pageBody.appendChild(welcomeDiv);
+        welcomeDiv.appendChild(welcomeText);
+        welcomeDiv.appendChild(homeCardsContainer);
+        homeCardsContainer.appendChild(todayDateCard);
+        todayDateCard.appendChild(todayGreeting);
+        todayDateCard.appendChild(todayDate);
+        homeCardsContainer.appendChild(btnContainer);
+        btnContainer.appendChild(todayReminderBtn);
+        todayReminderBtn.appendChild(todayReminderBtnTopText);
+        btnContainer.appendChild(importantReminderBtn);
+        importantReminderBtn.appendChild(importantReminderBtnTopText);
+
     }
 
     const clickToday = (e) => {

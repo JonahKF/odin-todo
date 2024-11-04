@@ -63,6 +63,7 @@ h6 {
     --brblack: #002b36;
     --black: #073642;
     --yellow: #b58900;
+    --yellow40: rgb(181, 137, 0, 0.4);
     --brred: #cb4b16;
     --red: #dc322f;
     --red25: rgba(220, 50, 47, 0.25);
@@ -72,7 +73,34 @@ h6 {
     --blue: #268bd2;
     --cyan: #2aa198;
     --green: #859900;
+    --green40: rgb(133, 153, 0, 0.4);
 }
+
+.tangerine-regular {
+    font-family: "Tangerine", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+  
+.tangerine-bold {
+    font-family: "Tangerine", cursive;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.radley-regular {
+    font-family: "Radley", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+  
+.radley-regular-italic {
+    font-family: "Radley", serif;
+    font-weight: 400;
+    font-style: italic;
+}
+  
+  
 
 * {
     font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
@@ -230,13 +258,16 @@ a {
 }
 
 .page-name {
+    font-family: "Radley";
     margin-bottom: 30px;
+    border-bottom: 1px solid var(--accentwhite);
+    width: 80%;
 }
 
 .task-container {
     display: flex;
     align-items: center;
-    width: 70%;
+    width: 80%;
     border-top: 1px solid var(--accentwhite);
     padding: 10px 0 10px 0;
 
@@ -580,6 +611,100 @@ a {
 h3 {
     margin-top: 15px;
     margin-bottom: 5px;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.welcome-div {
+    margin-top: 20px;
+    animation: fadeIn 2s;
+}
+
+.welcome-text {
+    font-size: 7rem;
+    margin-bottom: 30px;
+    font-family: "Tangerine";
+    font-weight: 700;
+}
+
+.home-cards-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 30px;
+    margin-top: -10px;
+    border-radius: 10px;
+    border: 1px solid var(--accentwhite);
+    width: 80%;
+    min-width: 200px;
+    padding: 20px;
+    height: 300px;
+}
+
+.home-card {
+    justify-self: center;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.today-greeting {
+    font-size: 1.3rem;
+    font-family: "Radley";
+}
+
+.today-date {
+    font-size: 1.8rem;
+    font-family: "Radley";
+}
+
+.home-btn-container {
+    display: inline-flex;
+}
+
+.home-btn {
+    width: 45%;
+    margin-top: 5px;
+    margin-left: 20px;
+    border-radius: 20px;
+    padding: 20px;
+    height: 120%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-btn > div {
+    color: var(--brblack);
+    opacity: 80%;
+    font-size: 1.5rem;
+    font-weight: 500;
+    width: 15ch;
+}
+
+.today-reminder {
+    background-color: var(--green40);
+    transition: 0.3s;
+}
+
+.today-reminder:hover {
+    background-color: var(--green);
+    transition: 0.3s;
+}
+
+.important-reminder {
+    background-color: var(--yellow40);
+    transition: 0.3s;
+}
+
+.important-reminder:hover {
+    background-color: var(--yellow);
+    transition: 0.3s;
 }
 
 /* Checkbox, adapted from https://uiverse.io/mrhyddenn/slippery-bear-64 */
