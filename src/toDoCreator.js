@@ -46,7 +46,7 @@ class ToDoList {
     }
 
     checkTitle(title) {
-        if (typeof title !== "string" || title.length > 60) {
+        if (typeof title !== "string" || title.length > 90) {
             throw new Error("Invalid Title");
         }
     }

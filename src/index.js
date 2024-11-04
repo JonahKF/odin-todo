@@ -40,16 +40,6 @@ function screenController() {
 
     loadListsFromStorage();
 
-    // // For Testing
-    // const defaultList = new ToDoList("Default List");
-    // listArray.push(defaultList);
-    // // const newTaskIndexOne = defaultList.addToDo("Add validator for new project names", "...", "2024-10-31");
-    // // const newTaskIndexTwo = defaultList.addToDo("Add task btn on All Tasks page", "...", "2024-11-04");
-    // // const newTaskIndexThree = defaultList.addToDo("Add colors based on due date relation to today", "...", "2024-11-07");
-    // // const newTaskIndexFour = defaultList.addToDo("Home and Today screens", "...", "2024-11-13");
-    // // const newTaskIndexFive = defaultList.addToDo("Settings pane (even if placeholder)", "...", "2024-11-23");
-
-
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     const displayLists = () => {
@@ -839,6 +829,13 @@ function screenController() {
             clickHome(homeBtn);
         }
     });
+
+    // Start Default Lists & Tasks
+    const defaultList = new ToDoList("Default List");
+    listArray.push(defaultList);
+    const newTaskIndexOne = defaultList.addToDo("New lists can be created on the bottom left.", "...", "2030-10-01");
+    const newTaskIndexTwo = defaultList.addToDo("Create new tasks inside of lists, found in the left-hand sidebar!", "...", "2034-11-04");
+    const newTaskIndexThree = defaultList.addToDo("Use the checkboxes next to tasks to delete them.", "...", "2036-12-25");
 
     // Generate Default List
     displayLists();
