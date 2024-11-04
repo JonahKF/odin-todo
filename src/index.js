@@ -1,21 +1,53 @@
 import "./styles.css";
-import { ToDoList } from "./toDoCreator.js"
+import { ToDo, ToDoList } from "./toDoCreator.js"
 import { parse, format, isValid } from 'date-fns';
 
 function screenController() {
     // Initialize list array & page body
-    const listArray = [];
+    let listArray = [];
     const listNav = document.querySelector(".list-nav");
     const pageBody = document.querySelector(".container");
 
-    // For Testing
-    const defaultList = new ToDoList("Default List");
-    listArray.push(defaultList);
-    // const newTaskIndexOne = defaultList.addToDo("Add validator for new project names", "...", "2024-10-31");
-    // const newTaskIndexTwo = defaultList.addToDo("Add task btn on All Tasks page", "...", "2024-11-04");
-    // const newTaskIndexThree = defaultList.addToDo("Add colors based on due date relation to today", "...", "2024-11-07");
-    // const newTaskIndexFour = defaultList.addToDo("Home and Today screens", "...", "2024-11-13");
-    // const newTaskIndexFive = defaultList.addToDo("Settings pane (even if placeholder)", "...", "2024-11-23");
+    const loadListsFromStorage = () => {
+        const savedLists = localStorage.getItem('todoLists');
+        // Check if there is any local storage
+        if (savedLists) {
+            const parsedLists = JSON.parse(savedLists);
+            listArray = parsedLists.map(listData => {
+                const list = new ToDoList(listData.name);
+                // Reconstruct the ToDoList Map
+                listData.todos.forEach(([key, value]) => {
+                    list.ToDoList.set(Number(key), ToDo.fromJSON(value));
+                });
+                list.Index = listData.index;
+                return list;
+            });
+        } else {
+            // Create default list if no saved data
+            const defaultList = new ToDoList("Default List");
+            listArray.push(defaultList);
+        }
+    };
+
+    const saveListsToStorage = () => {
+        const listsData = listArray.map(list => ({
+            name: list.Name,
+            todos: Array.from(list.ToDoList.entries()),
+            index: list.Index
+        }));
+        localStorage.setItem('todoLists', JSON.stringify(listsData));
+    };
+
+    loadListsFromStorage();
+
+    // // For Testing
+    // const defaultList = new ToDoList("Default List");
+    // listArray.push(defaultList);
+    // // const newTaskIndexOne = defaultList.addToDo("Add validator for new project names", "...", "2024-10-31");
+    // // const newTaskIndexTwo = defaultList.addToDo("Add task btn on All Tasks page", "...", "2024-11-04");
+    // // const newTaskIndexThree = defaultList.addToDo("Add colors based on due date relation to today", "...", "2024-11-07");
+    // // const newTaskIndexFour = defaultList.addToDo("Home and Today screens", "...", "2024-11-13");
+    // // const newTaskIndexFive = defaultList.addToDo("Settings pane (even if placeholder)", "...", "2024-11-23");
 
 
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -54,8 +86,32 @@ function screenController() {
             navListHeader.textContent = list.Name;
             wrapperAnchor.appendChild(navListHeader);
 
+            const deleteBtn = document.createElement("button");
+            deleteBtn.classList.add("delete-list-btn");
+            const deleteIcon = document.createElement("i");
+            deleteIcon.classList.add("fa-solid");
+            deleteIcon.classList.add("fa-trash");
+            deleteBtn.appendChild(deleteIcon);
+            div.appendChild(deleteBtn);
+
+            deleteBtn.addEventListener("click", (e) => {
+                e.stopPropagation(); // Prevent triggering list click
+                if (confirm(`Are you sure you want to delete "${list.Name}"?`)) {
+                    list.clearStorage();
+                    listArray.splice(listArray.indexOf(list), 1);
+                    saveListsToStorage();
+
+                    displayLists();
+                    const home = document.querySelector(".home");
+                    clickHome(home);
+                }
+            });
+
             div.addEventListener("click", () => clickList(div));
         });
+
+        saveListsToStorage();
+
     }
 
     // New List Prompt & Popup Setup
@@ -131,6 +187,7 @@ function screenController() {
     const newList = (name) => {
         const list = new ToDoList(name);
         listArray.push(list);
+        saveListsToStorage();
         displayLists();
     }
 
@@ -452,11 +509,13 @@ function screenController() {
             console.log(activeItemPriority);
             if (activeItemPriority === false) {
                 activeItem.priority = true;
+                saveListsToStorage();
                 const activeLogo = button.querySelector("i");
                 activeLogo.classList.add("starred");
             }
             else if (activeItemPriority === true) {
                 activeItem.priority = false;
+                saveListsToStorage();
                 const activeLogo = button.querySelector("i");
                 activeLogo.classList.remove("starred");
             }
@@ -587,6 +646,7 @@ function screenController() {
             activeItem.title = title;
             activeItem.description = description;
             activeItem.dueDate = dueDate;
+            saveListsToStorage();
 
             // Display tasks
             pageBody.replaceChildren();
@@ -642,6 +702,8 @@ function screenController() {
         const activeElement = document.querySelector(".active");
         const activeList = listArray[activeElement.id];
         const newToDo = activeList.addToDo(title, description, dueDate);
+        saveListsToStorage();
+
         pageBody.replaceChildren();
       
         const list = activeList;
@@ -650,8 +712,8 @@ function screenController() {
       
         const taskArray = list.getAllToDoItems();
         taskArray.forEach((task, index) => {
-          const taskContainer = createTaskContainer(task, index, list);
-          pageBody.appendChild(taskContainer);
+            const taskContainer = createTaskContainer(task, index, list);
+            pageBody.appendChild(taskContainer);
         });
       
         const newTaskBtn = createNewTaskButton();
@@ -710,6 +772,7 @@ function screenController() {
                 
                 const currentIndex = parseInt(taskContainer.dataset.taskIndex);
                 list.deleteToDoItem(currentIndex);
+                saveListsToStorage();
                 
                 // Refresh the entire list
                 const activeSidebar = document.querySelector(".active");
@@ -725,6 +788,7 @@ function screenController() {
         });
 
         return checkbox;
+
     };
 
     const formatDateInput = (inputValue) => {
