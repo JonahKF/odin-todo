@@ -827,7 +827,18 @@ function screenController() {
       
         // Format to YYYY-MM-DD
         return format(parsedDate, 'yyyy-MM-dd');
-      }
+    };
+
+    const settingsBtn = document.querySelector(".settings-btn");
+    settingsBtn.addEventListener("click", () => {
+        if (confirm("Are you sure you want to delete all local data? This cannot be undone.")) {
+            listArray = [];
+            saveListsToStorage();
+            const homeBtn = document.querySelector(".home");
+            displayLists();
+            clickHome(homeBtn);
+        }
+    });
 
     // Generate Default List
     displayLists();
