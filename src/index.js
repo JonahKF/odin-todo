@@ -233,6 +233,8 @@ function screenController() {
 
     const displayTodayTasks = () => {
         listArray.forEach((list, num) => {
+            const todayDate = format(new Date(), "yyyy-MM-dd");
+
             const subListName = document.createElement("h3");
             subListName.textContent = list.Name;
             subListName.className = `${num}`;
@@ -246,7 +248,7 @@ function screenController() {
 
             const taskArray = list.getAllToDoItems();
             taskArray.forEach((task, index) => {
-                if (task.dueDate === "2024-10-31") {
+                if (task.dueDate === todayDate) {
                     const taskContainer = createTaskContainer(task, index, list)
                     listTaskWrapper.appendChild(taskContainer);
                 }
