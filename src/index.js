@@ -12,10 +12,10 @@ function screenController() {
     const defaultList = new ToDoList("Default List");
     listArray.push(defaultList);
     const newTaskIndexOne = defaultList.addToDo("Add validator for new project names", "...", "2024-10-31");
-    const newTaskIndexTwo = defaultList.addToDo("Import date-fns, make due date changeable", "...", "2024-11-05");
+    const newTaskIndexTwo = defaultList.addToDo("Add task btn on All Tasks page", "...", "2024-11-05");
     const newTaskIndexThree = defaultList.addToDo("Add colors based on due date relation to today", "...", "2024-11-07");
-    const newTaskIndexFour = defaultList.addToDo("Allow users to make task important with star click", "...", "2024-11-13");
-    const newTaskIndexFive = defaultList.addToDo("Add click functionality to edit button on task", "...", "2024-11-23");
+    const newTaskIndexFour = defaultList.addToDo("Home and Today screens", "...", "2024-11-13");
+    const newTaskIndexFive = defaultList.addToDo("Settings pane (even if placeholder)", "...", "2024-11-23");
 
 
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -160,6 +160,7 @@ function screenController() {
         pageBody.appendChild(pageHeader);
 
         // Display items with due date today
+        displayTodayTasks();
     }
 
     const clickImportant = (e) => {
@@ -171,8 +172,7 @@ function screenController() {
         const pageHeader = createPageHeader(e.textContent);
         pageBody.appendChild(pageHeader);
 
-        // Display items flagged priority = true
-        // If none, display a message
+        displayImportantTasks();
     }
 
     const clickAllTasks = (e) => {
@@ -204,6 +204,52 @@ function screenController() {
             taskArray.forEach((task, index) => {
                 const taskContainer = createTaskContainer(task, index, list);
                 listTaskWrapper.appendChild(taskContainer);
+            });
+        });
+    };
+
+    const displayImportantTasks = () => {
+        listArray.forEach((list, num) => {
+            const subListName = document.createElement("h3");
+            subListName.textContent = list.Name;
+            subListName.className = `${num}`;
+
+            const listTaskWrapper = document.createElement("div");
+            listTaskWrapper.classList.add("list-task-wrapper");
+            listTaskWrapper.appendChild(subListName);
+
+            listTaskWrapper.id = (`list-id-${num}`);
+            pageBody.appendChild(listTaskWrapper);
+
+            const taskArray = list.getAllToDoItems();
+            taskArray.forEach((task, index) => {
+                if (task.priority) {
+                    const taskContainer = createTaskContainer(task, index, list)
+                    listTaskWrapper.appendChild(taskContainer);
+                }
+            });
+        });
+    };
+
+    const displayTodayTasks = () => {
+        listArray.forEach((list, num) => {
+            const subListName = document.createElement("h3");
+            subListName.textContent = list.Name;
+            subListName.className = `${num}`;
+
+            const listTaskWrapper = document.createElement("div");
+            listTaskWrapper.classList.add("list-task-wrapper");
+            listTaskWrapper.appendChild(subListName);
+
+            listTaskWrapper.id = (`list-id-${num}`);
+            pageBody.appendChild(listTaskWrapper);
+
+            const taskArray = list.getAllToDoItems();
+            taskArray.forEach((task, index) => {
+                if (task.dueDate === "2024-10-31") {
+                    const taskContainer = createTaskContainer(task, index, list)
+                    listTaskWrapper.appendChild(taskContainer);
+                }
             });
         });
     };
@@ -365,10 +411,6 @@ function screenController() {
     const taskPromptContainer = document.createElement("div");
     taskPromptContainer.classList.add("task-prompt-container");
     taskPromptOverlay.appendChild(taskPromptContainer);
-    // const taskPlusIcon = document.createElement("i");
-    // taskPlusIcon.classList.add("fa-solid");
-    // taskPlusIcon.classList.add("fa-plus");
-    // taskPromptContainer.appendChild(taskPlusIcon);
 
     const taskPromptForm = document.createElement("form"); // Grid Start
     taskPromptForm.action = "";
@@ -418,7 +460,7 @@ function screenController() {
     taskPromptForm.appendChild(taskPromptDueDate);
 
     let editFlag = false;
-    let identifier = 10000;
+    let identifier;
     const taskSubmitBtn = document.createElement("button");
     taskSubmitBtn.className = "task-submit-btn";
     const taskCheckIcon = document.createElement("i");
@@ -638,7 +680,5 @@ function screenController() {
     // Start on Home page
     clickHome(home);
 }
-
-
 
 screenController();
